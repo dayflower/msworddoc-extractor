@@ -1,0 +1,48 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require 'msworddoc-extractor'
+
+def app(*argv)
+  actions = []
+
+  options = [
+    [ '-d', '--document',   'Main contents (default)', :document       ],
+    [ '-w', '--whole',      'Whole text contents',     :whole_contents ],
+    [ '-i', '--header',     'Header parts',            :header         ],
+    [ '-f', '--footnote',   'Footnotes',               :footnote       ],
+    [ '-e', '--endnote',    'Endnotes',                :endnote        ],
+    [ '-a', '--annotation', 'Annotations',             :annotatation   ],
+    [ '-t', '--textbox',    'Text boxes',              :textbox        ],
+    [       '--header_textbox', 'Header text boxes',   :header_textbox ],
+    [ '-m', '--macro',      'Macro part',              :marco          ],
+  ]
+
+  optparse = OptionParser.new do |opt|
+    opt.banner = 'Usage: worddoc-extract [options] <files> ...'
+
+    options.each do |o|
+      action = o.pop
+      opt.on(*o) { actions << action }
+    end
+
+    opt.separator ''
+    opt.on('-h', '--help', 'Show this help') { puts opt; exit }
+  end
+
+  if actions.empty?
+    actions = [ :document ]
+  end
+
+  files = optparse.parse(argv)
+
+  files.each do |file|
+    doc = MSWordDoc::Extractor.load_file(file)
+    actions.each do |action|
+      puts doc.send(action)
+    end
+  end
+end
+
+app(*ARGV)
+
