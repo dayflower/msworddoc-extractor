@@ -308,8 +308,6 @@ module MSWordDoc
       "\x0d" => "\n",         # ASIS: Line Feed
       "\x09" => "\t",         # ASIS: Tab
 
-      "\x0d" => "\n",         # Paragraph ends; \n + U+2029?
-
       "\x0b" => "\n",         # Hard line breaks
 
       "\x2d" => "\x2d",       # ASIS: Breaking hyphens; U+2010?
