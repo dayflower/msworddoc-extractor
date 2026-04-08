@@ -236,7 +236,7 @@ module MSWordDoc
       i -= 1
       raise 'could not find suitable heading piece' unless i >= 0
 
-      output = ""
+      output = "".dup
       while length > 0 || length < 0
         pcd = @pcds[i]
 

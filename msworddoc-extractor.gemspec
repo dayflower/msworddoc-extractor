@@ -23,7 +23,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = '0.2.0'
 
-  has_rake = RUBY_VERSION >= '1.9.'
+  has_rake = RUBY_VERSION >= '1.9.' && RUBY_VERSION < '2.3'
 
   if gem.respond_to? :specification_version then
     gem.specification_version = 3
@@ -39,4 +39,5 @@ Gem::Specification.new do |gem|
     gem.add_dependency 'ruby-ole'
     gem.add_dependency 'rake'  unless has_rake
   end
+  gem.add_development_dependency 'test-unit'
 end

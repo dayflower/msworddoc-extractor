@@ -1,0 +1,38 @@
+name: Test Ruby 1.9
+
+on: [push]
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-version:
+          - '1.9'
+
+    name: Ruby ${{ matrix.ruby-version }}
+
+    runs-on: ubuntu-22.04
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby-version }}
+    - name: Install dependencies
+      run: bundle install
+    - name: Run tests
+      run: bundle exec rake test
+
+  # A utility job upon which Branch Protection can depend,
+  # thus remaining agnostic of the matrix.
+  test_matrix:
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    name: Matrix
+    needs: test
+    steps:
+    - name: Check build matrix status
+      if: ${{ needs.test.result != 'success' }}
+      run: exit 1
